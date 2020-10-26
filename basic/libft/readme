@@ -1,0 +1,36 @@
+NAME = libft.a
+
+SRC = *.c
+
+OBJ = $(SRC:.c = .o)
+
+FLAGS = -Wall -Wextra -Werror
+
+HEADER = libft.h
+
+.PHONY: all clean fclean re
+// Это виртуальные цели, те не создаются файлы с такими именами
+// Если это не прописать то при наличии файла clean например
+// fclean не выполнится тк будет ждать изменений в файле
+
+all: $(NAME)
+
+%.o: %.c $(HEADER)
+	gcc $(FLAGS) -c $< -o $@
+// выполянет только если цель %.o не существует
+// или время модификации цели старше люього из условий
+// $< это всегда условие а $@ это цель
+// сущетсвует еще общее неявное правило с той же ф-ей
+// .c.o:
+
+$(NAME): $(OBJ)
+	ar rc $(NAME) $(OBJ)
+	ranlib $(NAME)
+
+clean:
+	rm -f $(OBJ)
+
+fclean: clean
+	rm -f $(NAME)
+
+re: fclean all
